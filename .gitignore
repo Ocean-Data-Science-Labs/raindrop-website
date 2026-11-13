@@ -1,0 +1,3 @@
+# The downloaded GeoNames list stays local (data/postcodes.js is built from it)
+tools/geonames/
+.DS_Store
