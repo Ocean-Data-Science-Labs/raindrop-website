@@ -160,9 +160,11 @@ input:focus { outline: none; border-style: solid; }
 .privacy { font-size: 14px; line-height: 1.4; color: #4a5d7a; margin: 14px 0 0; }
 
 /* Footer: what we do on the left, the email on the right */
-.site-footer { border-top: 1px dashed var(--blue); }
+/* Sticky: always on screen at the bottom while scrolling; the page scrolls under it */
+.site-footer { position: sticky; bottom: 0; z-index: 5; background: var(--white); border-top: 1px dashed var(--blue); }
 .footer-inner {
-  max-width: calc(var(--page) + 2 * var(--gutter)); margin: 0 auto; padding: 24px var(--gutter) 32px;
+  /* The header's container: the left edge in line with the logo, the right with the sign-up button */
+  max-width: calc(var(--page) + 2 * var(--gutter) + 160px); margin: 0 auto; padding: 14px var(--gutter) 16px 24px;
   display: flex; justify-content: space-between; align-items: baseline; gap: 12px 24px; flex-wrap: wrap;
 }
 .footer-summary { font-family: var(--mono); font-weight: 500; font-size: 16px; letter-spacing: 0.05em; margin: 0; }
@@ -175,6 +177,7 @@ input:focus { outline: none; border-style: solid; }
 }
 @media (max-width: 720px) {
   .header-inner { padding: 14px 16px 62px; }
+  .footer-inner { padding-left: 16px; padding-right: 16px; }
   .brand { flex-basis: 190px; }
   .page { padding-top: 40px; }
   .intro p { font-size: 20px; }
@@ -185,6 +188,8 @@ input:focus { outline: none; border-style: solid; }
   .field--lat, .field--lon { width: 50%; }
 }
 @media (max-width: 420px) {
+  .footer-inner { flex-wrap: nowrap; padding: 10px 16px 12px; }
+  .footer-summary, .footer-email { font-size: 13px; letter-spacing: 0.02em; }
   .brand { flex-basis: 160px; }
   .site-header .button { font-size: 16px; padding: 7px 12px; min-height: 32px; }
 }
