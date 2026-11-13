@@ -96,25 +96,26 @@ img, video { max-width: 100%; height: auto; display: block; }
 /* One line each, 22 px as designed; script.js shrinks all three together only when a column is too narrow */
 .card-title { font-family: var(--mono); font-weight: 700; font-size: 22px; white-space: nowrap; margin: 0 0 8px; }
 .card-box { flex: 1; border: 1px dashed var(--blue); padding: 12px 15px; }
-.card-box--text p { font-size: 22px; letter-spacing: 0.05em; line-height: 1.4; margin: 0 0 1.4em; }
+/* Text in the dashed boxes: 18 px, below the 22 px titles and the 24 px intro */
+.card-box--text p { font-size: 18px; letter-spacing: 0.05em; line-height: 1.4; margin: 0 0 1.4em; }
 .card-box--text p:last-child { margin-bottom: 0; }
 
 .card-box--postcode { padding: 12px 15px 16px; }  /* first line level with the other two boxes */
-.postcode-form label { display: block; font-size: 20px; letter-spacing: 0.1em; margin-bottom: 14px; }
+.postcode-form label { display: block; font-size: 18px; letter-spacing: 0.05em; line-height: 1.4; margin-bottom: 14px; }
 .postcode-row { display: flex; gap: 10px; }
 .postcode-row input {
   flex: 1; min-width: 0; width: 100%; height: 44px; padding: 0 12px;
   border: 2px dashed var(--blue); border-radius: 0; background: var(--white);
-  font-family: var(--mono); font-size: 20px; color: var(--navy);
+  font-family: var(--mono); font-size: 18px; color: var(--navy);
 }
 .button--small { font-size: 18px; min-height: 44px; }
-.postcode-result { font-size: 18px; letter-spacing: 0.03em; line-height: 1.4; margin: 18px 0 0; }
+.postcode-result { font-size: 18px; letter-spacing: 0.05em; line-height: 1.4; margin: 18px 0 0; }
 .postcode-result strong { font-weight: 700; }
-.postcode-gauge { font-size: 18px; letter-spacing: 0.03em; line-height: 1.4; margin: 12px 0 0; }
+.postcode-gauge { font-size: 18px; letter-spacing: 0.05em; line-height: 1.4; margin: 12px 0 0; }
 .postcode-note { font-size: 13px; line-height: 1.4; color: #4a5d7a; margin: 12px 0 0; }
 
 .card-box--example { display: flex; flex-direction: column; align-items: center; gap: 10px; }
-.example-label { font-size: 20px; letter-spacing: 0.1em; color: #000; margin: 0; }
+.example-label { font-size: 18px; letter-spacing: 0.05em; color: #000; margin: 0; }
 .example-link { display: block; width: 100%; max-width: 353px; }
 .example-video { width: 100%; aspect-ratio: 1; object-fit: cover; border: 1px solid #e4eef4; background: #fff; }
 
@@ -158,6 +159,16 @@ input:focus { outline: none; border-style: solid; }
 .signup-thanks { font-size: 20px; line-height: 1.35; margin: 0; color: var(--navy); }
 .privacy { font-size: 14px; line-height: 1.4; color: #4a5d7a; margin: 14px 0 0; }
 
+/* Footer: what we do on the left, the email on the right */
+.site-footer { border-top: 1px dashed var(--blue); }
+.footer-inner {
+  max-width: calc(var(--page) + 2 * var(--gutter)); margin: 0 auto; padding: 24px var(--gutter) 32px;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px 24px; flex-wrap: wrap;
+}
+.footer-summary { font-family: var(--mono); font-weight: 500; font-size: 16px; letter-spacing: 0.05em; margin: 0; }
+.footer-email { font-size: 16px; letter-spacing: 0.05em; color: var(--blue); text-decoration: none; }
+.footer-email:hover, .footer-email:focus-visible { text-decoration: underline; }
+
 /* Tablet: two columns, then one */
 @media (max-width: 1100px) {
   .cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -169,7 +180,6 @@ input:focus { outline: none; border-style: solid; }
   .intro p { font-size: 20px; }
   .intro .button { margin-top: 12px; }
   .cards { grid-template-columns: minmax(0, 1fr); grid-auto-rows: auto; gap: 28px; margin-top: 56px; }
-  .card-box--text p { font-size: 19px; }
   .signup-form { padding: 24px 24px 32px; }
   .field-row { gap: 16px; }
   .field--lat, .field--lon { width: 50%; }
