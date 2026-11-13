@@ -29,7 +29,7 @@ function problem(f) {
 
 // Sign-ups go to raindrop@odsl.co by email through Web3Forms (the user's choice, 13 Nov 2026). The access key only
 // lets anyone send to that one address, and Web3Forms says it is safe in public pages.
-const WEB3FORMS_KEY = "";  // from web3forms.com for raindrop@odsl.co
+const WEB3FORMS_KEY = "0eab2d37-3dc4-4af4-9841-5cd0628f3949";  // web3forms.com, for raindrop@odsl.co
 const enter = form.querySelector(".button--enter");
 const FAILED = 'Sorry, that didn\'t go through. Please try again, or email <a href="mailto:raindrop@odsl.co">raindrop@odsl.co</a>.';
 

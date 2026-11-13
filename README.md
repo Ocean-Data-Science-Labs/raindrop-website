@@ -6,7 +6,8 @@ step), served by GitHub Pages from `main`. Designed in Figma (file RAIN DROP, pa
 - **Sign-up:** a dialog that opens from either "Sign up here" button, or from a link ending in `#signup`. It sends each
   sign-up by email to raindrop@odsl.co through [Web3Forms](https://web3forms.com): put the access key in
   `WEB3FORMS_KEY` in `script.js`. The key is public by design and can only send to that address. A hidden `botcheck`
-  box catches spam bots.
+  box catches spam bots. The free plan only takes submissions from a browser, so test it on the
+  live page, not with curl.
 - **"How much better will it be for me?":** `data/postcodes.js` maps each postcode (GeoNames, CC BY 4.0) to the nearest
   of 151 tested towns. For each town it gives how much more accurate Rain Drop's chance of 1 mm+ rain was than a typical
   single weather model (the average Brier score of the 7 ensemble models), days 1-3 and 4-7, Jan to Nov 2026, scored
