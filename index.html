@@ -114,13 +114,19 @@
       <p class="or">Or</p>
       <div class="field">
         <label for="address">Farm Address</label>
-        <input id="address" name="address" autocomplete="street-address">
+        <!-- An address finder (Mapbox): picking an address also fills Lat and Lon; any address typed in full still works -->
+        <input id="address" name="address" autocomplete="off" placeholder="Start typing to search" role="combobox"
+               aria-autocomplete="list" aria-expanded="false" aria-controls="address-list">
+        <div class="address-results" id="address-results" hidden>
+          <ul class="address-list" id="address-list" role="listbox" aria-label="Address suggestions"></ul>
+          <p class="address-credit">Address search by Mapbox</p>
+        </div>
       </div>
       <!-- Spam trap: hidden from people; Web3Forms drops a submission with it ticked -->
       <input type="checkbox" name="botcheck" class="visually-hidden" tabindex="-1" autocomplete="off" aria-hidden="true">
       <p class="form-error" id="signup-error" role="alert"></p>
       <button class="button button--enter" type="submit">Enter</button>
-      <p class="privacy">We only use these details to set up and send your forecast.</p>
+      <p class="privacy">We only use these details to set up and send your forecast. Address suggestions come from Mapbox.</p>
       <p class="signup-thanks" id="signup-thanks" hidden></p>
     </form>
   </dialog>

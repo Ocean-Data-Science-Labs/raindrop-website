@@ -76,6 +76,116 @@ form.addEventListener("submit", async (e) => {
   thanks.hidden = false;
 });
 
+// The address finder: Mapbox Address Autofill (the user's choice, 14 Nov 2026). Mapbox's own widget puts its list
+// outside the sign-up box, where the open box hides it, so this is a small list of our own on the same API. The token
+// is public by design and only works on raindrop.odsl.co (a URL restriction in the Mapbox account). Billing is per
+// session (up to 30 suggestions or 3 minutes; 1,000 free a month), so suggestions wait for 3 characters and a pause.
+const MAPBOX_TOKEN = "pk.eyJ1Ijoiam9udHktb2RzbCIsImEiOiJjbXdmbmMwdGQwNHdkMnpweGkyNXhzZWxsIn0.Ws89JAIrpaft_OoIV0ybcQ";
+const address = form.address;
+const results = document.getElementById("address-results");
+const list = document.getElementById("address-list");
+let session = null, sessionStart = 0, sessionCalls = 0;
+let suggestions = [], active = -1, typingTimer, latestCall = 0;
+let filled = null; // the address whose coordinates are in Lat and Lon, while they're ours rather than typed
+
+function sessionToken() {
+  if (!session || sessionCalls >= 30 || Date.now() - sessionStart > 170000) {
+    session = crypto.randomUUID(); sessionStart = Date.now(); sessionCalls = 0;
+  }
+  sessionCalls += 1;
+  return session;
+}
+
+async function mapbox(path, params) {
+  const query = new URLSearchParams({access_token: MAPBOX_TOKEN, ...params});
+  const response = await fetch(`https://api.mapbox.com/autofill/v1/${path}?${query}`);
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
+
+const shortAddress = (s) => s.full_address.replace(/, Australia$/, "");
+
+function show(items) {
+  suggestions = items;
+  active = -1;
+  list.replaceChildren(...items.map((s, i) => {
+    const li = document.createElement("li");
+    li.id = `address-option-${i}`;
+    li.setAttribute("role", "option");
+    li.setAttribute("aria-selected", "false");
+    li.textContent = shortAddress(s);
+    li.addEventListener("mousedown", (e) => e.preventDefault()); // keep the typing box focused
+    li.addEventListener("click", () => pick(i));
+    return li;
+  }));
+  results.hidden = !items.length;
+  address.setAttribute("aria-expanded", String(items.length > 0));
+  address.removeAttribute("aria-activedescendant");
+}
+
+function highlight(i) {
+  active = i;
+  [...list.children].forEach((li, j) => li.setAttribute("aria-selected", String(j === i)));
+  address.setAttribute("aria-activedescendant", `address-option-${i}`);
+  list.children[i].scrollIntoView({block: "nearest"});
+}
+
+async function suggest(text) {
+  const call = ++latestCall;
+  try {
+    const found = await mapbox(`suggest/${encodeURIComponent(text)}`,
+      {session_token: sessionToken(), country: "au", language: "en", limit: 5});
+    if (call === latestCall && address.value.trim() === text) show(found.suggestions || []);
+  } catch (err) {
+    console.warn("address search:", err); // the box still takes any address typed in full
+    show([]);
+  }
+}
+
+async function pick(i) {
+  const chosen = suggestions[i];
+  show([]);
+  address.value = shortAddress(chosen);
+  try {
+    const found = await mapbox(`retrieve/${encodeURIComponent(chosen.action.id)}`, {session_token: session});
+    const [lon, lat] = found.features[0].geometry.coordinates;
+    form.lat.value = lat.toFixed(5);
+    form.lon.value = lon.toFixed(5);
+    filled = address.value;
+    error.textContent = "";
+  } catch (err) {
+    console.warn("address lookup:", err); // the address alone is enough; we look it up by hand
+  }
+  session = null; // a chosen address ends the session
+}
+
+address.addEventListener("input", () => {
+  if (filled !== null && address.value !== filled) { // the address changed, so its coordinates no longer apply
+    form.lat.value = ""; form.lon.value = ""; filled = null;
+  }
+  clearTimeout(typingTimer);
+  const text = address.value.trim();
+  if (text.length < 3) { latestCall += 1; show([]); return; }
+  typingTimer = setTimeout(() => suggest(text), 250);
+});
+[form.lat, form.lon].forEach((input) => input.addEventListener("input", () => (filled = null)));
+address.addEventListener("keydown", (e) => {
+  if (!suggestions.length) return;
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault();
+    const step = e.key === "ArrowDown" ? 1 : -1;
+    highlight((active + step + suggestions.length) % suggestions.length);
+  } else if (e.key === "Enter" && active >= 0) {
+    e.preventDefault(); // choose the address rather than send the form
+    pick(active);
+  } else if (e.key === "Escape") {
+    e.preventDefault(); // close the list, not the sign-up box
+    show([]);
+  }
+});
+address.addEventListener("blur", () => show([]));
+signup.addEventListener("close", () => show([]));
+
 // "How much better will it be for me?": the postcode's nearest tested town (data/postcodes.js, built by
 // tools/build_postcodes.py) and how much more accurate our chance of rain was there than a typical single model.
 const DATA = window.RAIN_DROP_DATA;

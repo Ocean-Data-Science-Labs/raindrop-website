@@ -8,6 +8,12 @@ step), served by GitHub Pages from `main`. Designed in Figma (file RAIN DROP, pa
   `WEB3FORMS_KEY` in `script.js`. The key is public by design and can only send to that address. A hidden `botcheck`
   box catches spam bots. The free plan only takes submissions from a browser, and its Cloudflare
   blocks headless browsers too, so test it by hand in a normal browser on the live page.
+- **Address finder:** the sign-up's Farm Address box suggests Australian addresses as people type (Mapbox Address
+  Autofill API, `MAPBOX_TOKEN` in `script.js`). Choosing one fills Lat and Lon, so sign-ups arrive with coordinates.
+  The token is public and only works on raindrop.odsl.co (a URL restriction in the Mapbox account), so test it on
+  the live page. It's our own small list, not Mapbox's widget, because that widget puts its list outside the open
+  sign-up box, where the box hides it. Billing is per session (1,000 free a month): searches wait for 3 characters
+  and a short pause, and choosing an address ends the session. An address typed in full without choosing still works.
 - **"How much better will it be for me?":** `data/postcodes.js` maps each postcode (GeoNames, CC BY 4.0) to the nearest
   of 151 tested towns. For each town it gives how much more accurate Rain Drop's chance of 1 mm+ rain was than a typical
   single weather model (the average Brier score of the 7 ensemble models), days 1-3 and 4-7, Jan to Nov 2026, scored
