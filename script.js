@@ -21,7 +21,7 @@ function problem(f) {
     if (lat === null || lon === null) return "Please enter both Lat and Lon.";
     // Eastern Australia, roughly: the forecasts cover VIC, NSW, QLD and SA
     if (!(lat >= -44 && lat <= -10) || !(lon >= 129 && lon <= 154)) {
-      return "That Lat and Lon isn't in eastern Australia. Lat is negative, e.g. -38.46, and Lon e.g. 144.91.";
+      return "That Lat and Lon isn't in eastern Australia. Lat is negative, e.g. -38.24, and Lon e.g. 145.07.";
     }
   }
   return "";
@@ -195,7 +195,9 @@ const note = document.getElementById("postcode-note");
 const SAME = 2; // under 2% either way reads as "about as accurate"
 
 function better(pct, days) {
-  return pct >= SAME ? `<strong>${pct}% more accurate</strong> ${days}` : `about as accurate ${days}`;
+  if (pct >= SAME) return `<strong>${pct}% more accurate</strong> ${days}`;
+  if (pct <= -SAME) return `a little less accurate ${days}`; // a few SA towns, down to -4%
+  return `about as accurate ${days}`;
 }
 
 function answer(code) {
@@ -206,7 +208,7 @@ function answer(code) {
   const [name, state, d13, d47] = DATA.towns[hit[0]];
   const km = hit[1] < 1 ? "less than 1 km away" : `${hit[1]} km away`;
   let text = `Your nearest tested town is <strong>${name}, ${state}</strong> (${km}). There, our chance of rain was `
-    + `${better(d13, "over the next three days")} than a typical single weather model, and `
+    + `${better(d13, "for the next three days")} than a typical single weather model, and `
     + `${better(d47, "for days 4–7")}.`;
   if (hit[1] > 150) text += " That's a long way from you, so treat it as a rough guide.";
   return text;
@@ -219,11 +221,11 @@ postcodeForm.addEventListener("submit", (e) => {
   result.innerHTML = text; // built only from our own data and a checked 4-digit code
   const found = text.startsWith("Your nearest");
   // Bracken Ridge, days 1-3, out of sample: the gauge-tuned chance vs the email, about 11-13% (farm-rain-forecast
-  // research/farm_tuning/); one farm so far, hence "likely"
+  // research/farm_tuning/); one farm so far, hence "can"
   document.getElementById("postcode-gauge").hidden = !found;
   note.hidden = !found;
   note.textContent = found ? `Measured ${DATA.period} against recorded rain (SILO). A typical single model is the average `
-    + "of the seven weather models we combine. Postcode locations: GeoNames (CC BY 4.0)." : "";
+    + "of seven of the eight weather models we combine. Postcode locations: GeoNames (CC BY 4.0)." : "";
 });
 
 // The three box titles stay on one line: 22 px as designed, all shrunk together only when a column is too narrow
