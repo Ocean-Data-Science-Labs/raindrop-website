@@ -21,6 +21,9 @@ step), served by GitHub Pages from `main`. Designed in Figma (file RAIN DROP, pa
 - **Example forecast:** `assets/example-forecast.mp4`, the Mornington chart scrolling (`tools/make_forecast_video.py`).
 - **Header:** sits on the page's white cloud edge (`assets/cloud-*.svg`, `tools/make_cloud_edges.py`), drifting slowly.
   There's no drifting, autoplaying video or button animation for visitors who ask their device for less motion.
+- **Visitor stats:** [Cloudflare Web Analytics](https://dash.cloudflare.com) (Analytics & Logs → Web Analytics),
+  from a script at the end of `index.html`. It sets no cookies. The token in it is public. Ad blockers stop some
+  visits being counted, so the numbers run a little low.
 - **Fonts:** ABC Areal / ABC Areal Semi Mono where installed, otherwise IBM Plex Sans / Plex Mono (Google Fonts). The
   logo's wordmark is outlined in `assets/logo-lockup.svg`.
 
