@@ -72,7 +72,15 @@ form.addEventListener("submit", async (e) => {
     return;
   }
   form.querySelectorAll(".field, .field-row, .or, .button--enter, .privacy").forEach((el) => (el.hidden = true));
-  thanks.textContent = `Thanks, ${form.farm_name.value.trim()}. We'll be in touch to set up your first forecast.`;
+  // Sign-ups start by themselves now (the forecast repo's signups.py, the user's wording, 28 Nov 2026). The farm's
+  // name goes in as text, never HTML.
+  const contact = document.createElement("a");
+  contact.href = "mailto:raindrop@odsl.co";
+  contact.textContent = "raindrop@odsl.co";
+  thanks.replaceChildren(
+    `Thanks, ${form.farm_name.value.trim()}. Your first forecast should arrive around 7:30 tomorrow morning. If we need `
+      + "to check anything, we'll be in touch. Likewise please reach out to ",
+    contact, " with any questions of your own.");
   thanks.hidden = false;
 });
 
