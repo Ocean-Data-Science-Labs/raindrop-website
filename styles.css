@@ -1,4 +1,7 @@
 /* Rain Drop website, from the RAIN DROP Figma file (Website page: Frame 1 = home, Frame 2 = sign-up). */
+
+/* Anything the script hides stays hidden, even where a rule below sets display (.field, .field-row) */
+[hidden] { display: none !important; }
 :root {
   --navy: #0a234a;        /* text */
   --blue: #0d89c3;        /* buttons, logo square, dashed borders */
@@ -163,6 +166,7 @@ input:focus { outline: none; border-style: solid; }
   letter-spacing: 0.1em; text-align: left; padding: 8px 21px; margin-left: -8px;
 }
 .signup-thanks { font-size: 20px; line-height: 1.35; margin: 0; color: var(--navy); }
+.signup-thanks a { color: inherit; }
 .privacy { font-size: 14px; line-height: 1.4; color: #4a5d7a; margin: 14px 0 0; }
 
 /* Footer: what we do on the left, the email on the right */
